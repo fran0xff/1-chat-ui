@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 const PALETTE = [
   { bg: 'bg-yellow-300', text: 'text-slate-900' },
   { bg: 'bg-sky-400', text: 'text-white' },
@@ -7,33 +9,41 @@ const PALETTE = [
   { bg: 'bg-fuchsia-400', text: 'text-white' },
 ]
 
-function paletteForName(name) {
+// Module-level cache: the same username repeats across many messages,
+// so palette/initials only need to be computed once per unique name.
+const avatarCache = new Map()
+
+function avatarForName(name) {
+  const cached = avatarCache.get(name)
+  if (cached) return cached
+
   let hash = 0
   for (let i = 0; i < name.length; i += 1) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash)
   }
-  return PALETTE[Math.abs(hash) % PALETTE.length]
-}
-
-function initialsFor(name) {
-  return name
+  const palette = PALETTE[Math.abs(hash) % PALETTE.length]
+  const initials = name
     .split(' ')
     .map((part) => part[0])
     .slice(0, 2)
     .join('')
     .toUpperCase()
+
+  const result = { ...palette, initials }
+  avatarCache.set(name, result)
+  return result
 }
 
 function MessageBubble({ message }) {
   const { username, time, text, isOwn } = message
-  const { bg, text: textColor } = paletteForName(username)
+  const { bg, text: textColor, initials } = avatarForName(username)
 
   return (
     <div className={`flex items-end gap-2 ${isOwn ? 'flex-row-reverse' : 'flex-row'}`}>
       <div
         className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-[2.5px] border-slate-900 text-xs font-bold ${bg} ${textColor}`}
       >
-        {initialsFor(username)}
+        {initials}
       </div>
 
       <div className={`flex max-w-[75%] flex-col gap-1 sm:max-w-[60%] ${isOwn ? 'items-end' : 'items-start'}`}>
@@ -61,4 +71,4 @@ function MessageBubble({ message }) {
   )
 }
 
-export default MessageBubble
+export default memo(MessageBubble)

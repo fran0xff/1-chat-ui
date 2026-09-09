@@ -1,17 +1,20 @@
 import { LogOut, MessageCircle, Plug } from 'lucide-react'
-import { useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import ThemeToggle from './ThemeToggle'
 
 function ChatHeader({ isDark, onToggleTheme, connection, onConnect, onDisconnect }) {
   const [nameDraft, setNameDraft] = useState('')
 
-  const handleConnect = (e) => {
-    e.preventDefault()
-    const trimmed = nameDraft.trim()
-    if (!trimmed) return
-    onConnect(trimmed)
-    setNameDraft('')
-  }
+  const handleConnect = useCallback(
+    (e) => {
+      e.preventDefault()
+      const trimmed = nameDraft.trim()
+      if (!trimmed) return
+      onConnect(trimmed)
+      setNameDraft('')
+    },
+    [nameDraft, onConnect],
+  )
 
   return (
     <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur-sm sm:px-6 dark:border-slate-800 dark:bg-slate-900/80">
@@ -69,4 +72,4 @@ function ChatHeader({ isDark, onToggleTheme, connection, onConnect, onDisconnect
   )
 }
 
-export default ChatHeader
+export default memo(ChatHeader)

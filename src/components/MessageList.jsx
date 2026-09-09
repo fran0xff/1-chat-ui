@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import MessageBubble from './MessageBubble'
 
 function MessageList({ messages }) {
@@ -20,4 +20,4 @@ function MessageList({ messages }) {
   )
 }
 
-export default MessageList
+export default memo(MessageList)

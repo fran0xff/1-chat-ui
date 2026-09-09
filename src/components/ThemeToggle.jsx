@@ -1,4 +1,5 @@
 import { Moon, Sun } from 'lucide-react'
+import { memo } from 'react'
 
 function ThemeToggle({ isDark, onToggle }) {
   return (
@@ -25,4 +26,4 @@ function ThemeToggle({ isDark, onToggle }) {
   )
 }
 
-export default ThemeToggle
+export default memo(ThemeToggle)

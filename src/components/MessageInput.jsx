@@ -1,22 +1,25 @@
 import { Send } from 'lucide-react'
-import { useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 
 function MessageInput({ disabled, onSend }) {
   const [draft, setDraft] = useState('')
 
-  const handleSend = () => {
+  const handleSend = useCallback(() => {
     const trimmed = draft.trim()
     if (!trimmed || disabled) return
     onSend(trimmed)
     setDraft('')
-  }
+  }, [draft, disabled, onSend])
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSend()
-    }
-  }
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault()
+        handleSend()
+      }
+    },
+    [handleSend],
+  )
 
   return (
     <div className="border-t border-slate-200 bg-white px-4 py-3 sm:px-6 dark:border-slate-800 dark:bg-slate-900">
@@ -44,4 +47,4 @@ function MessageInput({ disabled, onSend }) {
   )
 }
 
-export default MessageInput
+export default memo(MessageInput)

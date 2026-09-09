@@ -1,4 +1,5 @@
 import { MessageCircleOff } from 'lucide-react'
+import { memo } from 'react'
 
 function EmptyState() {
   return (
@@ -16,4 +17,4 @@ function EmptyState() {
   )
 }
 
-export default EmptyState
+export default memo(EmptyState)
