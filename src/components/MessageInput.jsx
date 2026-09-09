@@ -24,23 +24,29 @@ function MessageInput({ disabled, onSend }) {
   return (
     <div className="border-t border-slate-200 bg-white px-4 py-3 sm:px-6 dark:border-slate-800 dark:bg-slate-900">
       <div className="mx-auto flex max-w-2xl items-center gap-2">
+        <label htmlFor="message-input" className="sr-only">
+          Mensaje
+        </label>
         <input
+          id="message-input"
           type="text"
+          name="message"
+          autoComplete="off"
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          placeholder={disabled ? 'Conéctate para escribir un mensaje...' : 'Escribe un mensaje...'}
-          className="flex-1 rounded-full border border-slate-200 bg-slate-100 px-4 py-2.5 text-sm text-slate-700 outline-none transition-colors focus:border-indigo-400 focus:bg-white disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:bg-slate-800"
+          placeholder={disabled ? 'Conéctate para escribir un mensaje…' : 'Escribe un mensaje…'}
+          className="flex-1 rounded-full border border-slate-200 bg-slate-100 px-4 py-2.5 text-sm text-slate-700 outline-none transition-colors focus-visible:border-indigo-400 focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-indigo-400/40 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus-visible:bg-slate-800"
         />
         <button
           type="button"
           onClick={handleSend}
           disabled={disabled || !draft.trim()}
           aria-label="Enviar mensaje"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white shadow-sm transition-colors hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 dark:disabled:bg-slate-700 dark:disabled:text-slate-500"
+          className="flex h-10 w-10 shrink-0 touch-manipulation items-center justify-center rounded-full bg-indigo-500 text-white shadow-sm transition-colors hover:bg-indigo-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 dark:focus-visible:ring-offset-slate-900 dark:disabled:bg-slate-700 dark:disabled:text-slate-500"
         >
-          <Send size={16} />
+          <Send size={16} aria-hidden="true" />
         </button>
       </div>
     </div>

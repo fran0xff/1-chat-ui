@@ -20,6 +20,9 @@ function App() {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark)
+    document
+      .getElementById('theme-color-meta')
+      ?.setAttribute('content', isDark ? '#0f172a' : '#f1f5f9')
   }, [isDark])
 
   const handleToggleTheme = useCallback(() => {

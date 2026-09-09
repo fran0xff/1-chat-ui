@@ -1,12 +1,14 @@
 import { memo } from 'react'
 
+// Saturated shades pair with white text; light shades pair with dark text —
+// keeps every combination at a safe contrast ratio for legibility.
 const PALETTE = [
   { bg: 'bg-yellow-300', text: 'text-slate-900' },
-  { bg: 'bg-sky-400', text: 'text-white' },
-  { bg: 'bg-emerald-400', text: 'text-white' },
-  { bg: 'bg-pink-400', text: 'text-white' },
+  { bg: 'bg-sky-500', text: 'text-white' },
+  { bg: 'bg-emerald-500', text: 'text-white' },
+  { bg: 'bg-pink-500', text: 'text-white' },
   { bg: 'bg-orange-300', text: 'text-slate-900' },
-  { bg: 'bg-fuchsia-400', text: 'text-white' },
+  { bg: 'bg-fuchsia-500', text: 'text-white' },
 ]
 
 // Module-level cache: the same username repeats across many messages,
@@ -61,7 +63,7 @@ function MessageBubble({ message }) {
             }`}
           />
           <div
-            className={`relative z-10 rounded-3xl border-[2.5px] border-slate-900 px-4 py-2 text-sm font-semibold leading-relaxed shadow-[3px_3px_0_rgba(15,23,42,0.25)] ${bg} ${textColor}`}
+            className={`relative z-10 rounded-3xl border-[2.5px] border-slate-900 px-4 py-2 text-sm font-semibold leading-relaxed break-words shadow-[3px_3px_0_rgba(15,23,42,0.25)] ${bg} ${textColor}`}
           >
             {text}
           </div>
