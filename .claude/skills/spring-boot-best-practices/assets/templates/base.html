@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="layout(title, content)">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <th:block th:replace="${title}"></th:block>
+</head>
+<body class="flex min-h-screen flex-col bg-slate-50 text-slate-900">
+  <header th:replace="~{fragments/header :: header}"></header>
+
+  <main class="mx-auto w-full max-w-4xl flex-1 px-4 py-8">
+    <th:block th:replace="${content}"></th:block>
+  </main>
+
+  <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
