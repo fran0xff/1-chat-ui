@@ -3,13 +3,15 @@ import ChatHeader from './components/ChatHeader'
 import EmptyState from './components/EmptyState'
 import MessageInput from './components/MessageInput'
 import MessageList from './components/MessageList'
+import TypingIndicator from './components/TypingIndicator'
 import { useChatConnection } from './hooks/useChatConnection'
 
 function App() {
   const [isDark, setIsDark] = useState(
     () => window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false,
   )
-  const { connection, messages, error, connect, disconnect, sendMessage } = useChatConnection()
+  const { connection, messages, typingUsers, error, connect, disconnect, sendMessage, sendTyping } =
+    useChatConnection()
   const isConnected = connection.status === 'connected'
 
   useEffect(() => {
@@ -38,7 +40,8 @@ function App() {
         </p>
       )}
       {isConnected ? <MessageList messages={messages} /> : <EmptyState />}
-      <MessageInput disabled={!isConnected} onSend={sendMessage} />
+      {isConnected && <TypingIndicator users={typingUsers} />}
+      <MessageInput disabled={!isConnected} onSend={sendMessage} onTyping={sendTyping} />
     </div>
   )
 }

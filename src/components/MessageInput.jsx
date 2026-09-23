@@ -1,8 +1,11 @@
-import { Send } from 'lucide-react'
-import { memo, useCallback, useState } from 'react'
+import { Send, Smile } from 'lucide-react'
+import { memo, useCallback, useRef, useState } from 'react'
+import EmojiPicker from './EmojiPicker'
 
-function MessageInput({ disabled, onSend }) {
+function MessageInput({ disabled, onSend, onTyping }) {
   const [draft, setDraft] = useState('')
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false)
+  const inputRef = useRef(null)
 
   const handleSend = useCallback(() => {
     const trimmed = draft.trim()
@@ -21,19 +24,58 @@ function MessageInput({ disabled, onSend }) {
     [handleSend],
   )
 
+  const handleSelectEmoji = useCallback(
+    (emoji) => {
+      const input = inputRef.current
+      const start = input?.selectionStart ?? draft.length
+      const end = input?.selectionEnd ?? draft.length
+      setDraft(draft.slice(0, start) + emoji + draft.slice(end))
+      onTyping?.()
+
+      // Selection range is lost on the value update above; restore focus and
+      // move the cursor to just after the inserted emoji on the next tick.
+      requestAnimationFrame(() => {
+        const cursor = start + emoji.length
+        input?.focus()
+        input?.setSelectionRange(cursor, cursor)
+      })
+    },
+    [draft, onTyping],
+  )
+
   return (
     <div className="border-t border-slate-200 bg-white px-4 py-3 sm:px-6 dark:border-slate-800 dark:bg-slate-900">
       <div className="mx-auto flex max-w-2xl items-center gap-2">
+        <div className="relative shrink-0">
+          <button
+            type="button"
+            onClick={() => setIsEmojiPickerOpen((prev) => !prev)}
+            disabled={disabled}
+            aria-label="Insertar emoticono"
+            aria-expanded={isEmojiPickerOpen}
+            className="flex h-10 w-10 touch-manipulation items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200 dark:focus-visible:ring-offset-slate-900"
+          >
+            <Smile size={18} aria-hidden="true" />
+          </button>
+          {isEmojiPickerOpen && !disabled && (
+            <EmojiPicker onSelect={handleSelectEmoji} onClose={() => setIsEmojiPickerOpen(false)} />
+          )}
+        </div>
+
         <label htmlFor="message-input" className="sr-only">
           Mensaje
         </label>
         <input
           id="message-input"
+          ref={inputRef}
           type="text"
           name="message"
           autoComplete="off"
           value={draft}
-          onChange={(e) => setDraft(e.target.value)}
+          onChange={(e) => {
+            setDraft(e.target.value)
+            onTyping?.()
+          }}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           placeholder={disabled ? 'Conéctate para escribir un mensaje…' : 'Escribe un mensaje…'}
